@@ -1,5 +1,12 @@
 "use client";
 
+// TypeScript declaration for window.ethereum
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 import { useState } from "react";
 import { ethers, BrowserProvider } from "ethers";
 import { getCrowdFundContract } from "@/lib/contract"; // 연동 함수
@@ -10,34 +17,50 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import InsufficientFundsPopup from "@/components/ui/InsufficientFundsPopup";
 
 export default function ProjectDetailPage() {
   const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [fundAmount, setFundAmount] = useState("0.01"); // 기본값 0.01 ETH
+
+  const closePopup = () => setShowPopup(false);
 
   const handleFund = async () => {
     try {
-      setLoading(true);
+    setLoading(true);
 
-      if (!window.ethereum) throw new Error("Metamask가 설치되어 있지 않습니다.");
-      await window.ethereum.request({ method: "eth_requestAccounts" });
+    if (!window.ethereum) throw new Error("Metamask가 설치되어 있지 않습니다.");
+    await window.ethereum.request({ method: "eth_requestAccounts" });
 
-      const provider = new BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const contract = getCrowdFundContract(signer);
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = getCrowdFundContract(signer);
 
-      const campaignId = 1;
-      const amount = ethers.parseEther("0.01"); // 0.01 ETH 후원
+    const campaignId = 1;
+    const amount = ethers.parseEther(fundAmount || "0");
 
-      const tx = await contract.contribute(campaignId, { value: amount });
-      await tx.wait();
+    const tx = await contract.contribute(campaignId, { value: amount });
+    const receipt = await tx.wait();
 
+    if (receipt.status === 1) {
       alert("후원이 완료되었습니다!");
-    } catch (err: any) {
-      console.error(err);
-      alert("후원 실패: " + (err.message || "알 수 없는 오류"));
-    } finally {
-      setLoading(false);
+    } else {
+      throw new Error("트랜잭션 실패");
     }
+  } catch (err: any) {
+    console.error(err);
+
+    const msg = err?.message?.toLowerCase();
+    if (msg && msg.includes("insufficient funds")) {
+      setShowPopup(true);
+    } else {
+      alert("후원 실패: " + (err.message || "알 수 없는 오류"));
+    }
+  } finally {
+    setLoading(false);
+  }
+
   };
 
   const project = {
@@ -181,6 +204,22 @@ export default function ProjectDetailPage() {
                       <div className="font-bold mt-1">{project.estimatedDeliveryDate}</div>
                     </div>
                   </div>
+                  {/* 후원 금액 입력창 */}
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      후원 금액 (ETH)
+                    </label>
+                    <input
+                      type="number"
+                      value={fundAmount}
+                      onChange={(e) => setFundAmount(e.target.value)}
+                      min="0.001"
+                      step="0.001"
+                      placeholder="예: 0.01"
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+
                 </CardContent>
                 <CardFooter>
                   <Button onClick={handleFund} disabled={loading} className="w-full py-6 text-lg">
@@ -193,6 +232,7 @@ export default function ProjectDetailPage() {
         </div>
       </main>
       <Footer />
+      {showPopup && <InsufficientFundsPopup onClose={closePopup} />}
     </div>
   );
 }
