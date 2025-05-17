@@ -82,8 +82,15 @@ VITE_GOVERNOR_ADDRESS=${govAddr}
 VITE_GOVTOKEN_ADDRESS=${gtokenAddr}
 VITE_TIMELOCK_ADDRESS=${tlAddr}
 `;
-  fs.writeFileSync("./frontend/.env.local", env);
-  console.log("✔  frontend/.env.local updated.");
+// 1. .env.local 프론트 위치에 저장
+fs.writeFileSync("../Clone-tumblbug/tumblbug-clone/.env.local", env);
+
+// 2. ABI 복사
+fs.copyFileSync(
+  "./artifacts/contracts/CrowdFund.sol/CrowdFund.json",
+  "../Clone-tumblbug/tumblbug-clone/src/lib/abi/CrowdFund.json"
+);
+  console.log("✔  frontend/.env.local updated. + ABI copied : ../Clone-tumblbug/tumblbug-clone/src/lib/abi/CrowdFund.json");
 }
 
 main().catch((e) => {

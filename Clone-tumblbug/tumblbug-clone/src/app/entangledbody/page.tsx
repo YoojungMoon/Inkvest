@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import { ethers, BrowserProvider } from "ethers";
+import { getCrowdFundContract } from "@/lib/contract"; // 연동 함수
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
@@ -7,6 +12,34 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function ProjectDetailPage() {
+  const [loading, setLoading] = useState(false);
+
+  const handleFund = async () => {
+    try {
+      setLoading(true);
+
+      if (!window.ethereum) throw new Error("Metamask가 설치되어 있지 않습니다.");
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = getCrowdFundContract(signer);
+
+      const campaignId = 1;
+      const amount = ethers.parseEther("0.01"); // 0.01 ETH 후원
+
+      const tx = await contract.contribute(campaignId, { value: amount });
+      await tx.wait();
+
+      alert("후원이 완료되었습니다!");
+    } catch (err: any) {
+      console.error(err);
+      alert("후원 실패: " + (err.message || "알 수 없는 오류"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const project = {
     title: "무용영화 Entangled Body 얽힌몸",
     creator: "KKUM",
@@ -41,7 +74,7 @@ export default function ProjectDetailPage() {
         {/* Project Content */}
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Left Column - Project Details */}
+            {/* Left Column */}
             <div className="lg:col-span-2">
               <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-8">
                 <Image
@@ -53,7 +86,6 @@ export default function ProjectDetailPage() {
                 />
               </div>
 
-              {/* Project Navigation */}
               <div className="border-b mb-8">
                 <div className="flex gap-6 mb-2">
                   <Link href="#" className="font-medium text-primary border-b-2 border-primary pb-2">
@@ -71,22 +103,16 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
 
-              {/* Project Story */}
               <div className="prose max-w-none">
                 <h2 className="text-xl font-bold">프로젝트 소개</h2>
-                <p>
-                  안녕하세요, KKUM 스튜디오입니다. 우리의 새로운 무용영화 프로젝트를 소개합니다.
-                </p>
-
+                <p>안녕하세요, KKUM 스튜디오입니다. 우리의 새로운 무용영화 프로젝트를 소개합니다.</p>
                 <h3 className="text-lg font-bold mt-8">이 영화에 관하여</h3>
                 <p>
-                  &lt;Entangled Body 얽힌몸&gt;은 '우리의 몸과 마음, 기억과 역사'가 어떻게 서로 얽혀 있는지를
-                  표현하는 무용영화입니다. 춤과 영상의 결합을 통해 인간 존재의 깊은 연결성을 탐구합니다.
+                  &lt;Entangled Body 얽힌몸&gt;은 '우리의 몸과 마음, 기억과 역사'가 어떻게 서로 얽혀 있는지를 표현하는 무용영화입니다.
+                  춤과 영상의 결합을 통해 인간 존재의 깊은 연결성을 탐구합니다.
                 </p>
-
                 <p>
-                  5명의 무용수가 펼치는 이 작품은 개인의 몸이 타인과 공간, 역사와 어떻게 얽히는지를
-                  표현적이고 시각적인 언어로 풀어냅니다.
+                  5명의 무용수가 펼치는 이 작품은 개인의 몸이 타인과 공간, 역사와 어떻게 얽히는지를 표현적이고 시각적인 언어로 풀어냅니다.
                 </p>
 
                 <div className="my-8">
@@ -101,18 +127,16 @@ export default function ProjectDetailPage() {
 
                 <h3 className="text-lg font-bold mt-8">창작 배경</h3>
                 <p>
-                  "우리의 몸은 하나의 단일체가 아닙니다. 몸은 기억을 담는 그릇이자,
-                  역사의 흔적들이 층층이 쌓인 장소입니다."
+                  "우리의 몸은 하나의 단일체가 아닙니다. 몸은 기억을 담는 그릇이자, 역사의 흔적들이 층층이 쌓인 장소입니다."
                 </p>
                 <p>
-                  이 영화는 단순한 무용 작품을 넘어 우리 사회와 역사, 개인의 관계를
-                  신체적 언어로 표현하고자 합니다. 독특한 촬영 기법과 편집을 통해
-                  신체의 움직임이 가진 아름다움과 의미를 극대화하고자 합니다.
+                  이 영화는 단순한 무용 작품을 넘어 우리 사회와 역사, 개인의 관계를 신체적 언어로 표현하고자 합니다.
+                  독특한 촬영 기법과 편집을 통해 신체의 움직임이 가진 아름다움과 의미를 극대화하고자 합니다.
                 </p>
               </div>
             </div>
 
-            {/* Right Column - Funding Info */}
+            {/* Right Column */}
             <div className="lg:col-span-1">
               <Card className="sticky top-6">
                 <CardContent className="pt-6">
@@ -159,7 +183,9 @@ export default function ProjectDetailPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full py-6 text-lg">이 프로젝트 후원하기</Button>
+                  <Button onClick={handleFund} disabled={loading} className="w-full py-6 text-lg">
+                    {loading ? "후원 중..." : "이 프로젝트 후원하기"}
+                  </Button>
                 </CardFooter>
               </Card>
             </div>
