@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ethers, BrowserProvider } from "ethers";
 import { getCrowdFundContract } from "@/lib/contract"; // 연동 함수
 import Header from "@/components/Header";
@@ -99,6 +99,56 @@ export default function ProjectDetailPage() {
     }
   }
 };
+  const [canMintNFT, setCanMintNFT] = useState(false);
+  const [minting, setMinting] = useState(false);
+
+  useEffect(() => {
+    async function checkEligibility() {
+      if (!window.ethereum) return;
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = getCrowdFundContract(signer);
+      const address = await signer.getAddress();
+      
+      const pledged = await contract.pledgedOf(1, address);
+      const campaign = await contract.campaigns(1);
+      const alreadyMinted = await contract.nftMinted(1, address);
+
+      const now = Math.floor(Date.now() / 1000);
+      if (
+        pledged > 0 &&
+        Number(campaign.endAt) < now &&
+        Number(campaign.pledged) >= Number(campaign.goal) &&
+        !alreadyMinted
+      ) {
+        setCanMintNFT(true);
+      }
+    }
+    checkEligibility();
+  }, []);
+
+  const handleMintNFT = async () => {
+    try {
+      setMinting(true);
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = getCrowdFundContract(signer);
+
+      const tx = await contract.mintArtworkNFT(1);
+      const receipt = await tx.wait();
+      if (receipt.status === 1) {
+        alert("🎉 NFT 민팅이 완료되었습니다!");
+        setCanMintNFT(false);
+      } else {
+        throw new Error("트랜잭션 실패");
+      }
+    } catch (err: any) {
+      alert("민팅 실패: " + (err.message || "알 수 없는 오류"));
+    } finally {
+      setMinting(false);
+    }
+  };
+
 
   const project = {
     title: "무용영화 Entangled Body 얽힌몸",
@@ -198,7 +248,9 @@ export default function ProjectDetailPage() {
 
             {/* Right Column */}
             <div className="lg:col-span-1">
-              <Card className="sticky top-6">
+              {/* <Card className="sticky top-6"> */} {/* 카드 위치 스크롤에 영향 없이 고정 */}
+              <Card className="mb-8">
+
                 <CardContent className="pt-6">
                   <div className="mb-6">
                     <div className="flex justify-between mb-2">
@@ -277,6 +329,22 @@ export default function ProjectDetailPage() {
                 </Button>
                 </CardFooter>
 
+              </Card>
+              {/* NFT 민팅 카드 - 기존 UI Card 스타일 활용 */}
+              <Card className="mt-8">
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-bold mb-4">🎁 NFT 보상</h3>
+                  <p className="text-gray-700 text-sm mb-4">
+                    이 프로젝트에 후원하신 분은 캠페인이 성공적으로 종료된 후, 단 한 번 NFT를 받을 수 있습니다.
+                  </p>
+                  <Button
+                    onClick={handleMintNFT}
+                    disabled={!canMintNFT || minting}
+                    className="w-full py-6 text-lg bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    {minting ? "NFT 민팅 중..." : "이 프로젝트 NFT 받기"}
+                  </Button>
+                </CardContent>
               </Card>
             </div>
           </div>
