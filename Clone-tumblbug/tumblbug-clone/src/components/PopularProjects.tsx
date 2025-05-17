@@ -15,8 +15,8 @@ const popularProjects = [
   },
   {
     id: 2,
-    title: "수억명이 함께보는 빌리언스 ! <>",
-    creator: "",
+    title: "빌리언스 뜨개 인형",
+    creator: "이유정",
     imageUrl: "https://ext.same-assets.com/2792592828/3254777411.png",
     fundingPercentage: 2032,
     fundingAmount: "10,163,700",
@@ -26,7 +26,7 @@ const popularProjects = [
   {
     id: 3,
     title: "<토박이> 토마토 마가 보이는 길 !",
-    creator: "(주)",
+    creator: "신혜정",
     imageUrl: "https://ext.same-assets.com/2792592828/1291817823.jpeg",
     fundingPercentage: 18875,
     fundingAmount: "566,273,000",
@@ -36,7 +36,7 @@ const popularProjects = [
   {
     id: 4,
     title: "희망을 잇는 다리를 함께 건설합니다",
-    creator: "",
+    creator: "문유정",
     imageUrl: "https://ext.same-assets.com/2792592828/421791190.png",
     fundingPercentage: 2636,
     fundingAmount: "13,180,115",
