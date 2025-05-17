@@ -60,8 +60,43 @@ export default function ProjectDetailPage() {
   } finally {
     setLoading(false);
   }
-
   };
+
+  const handleRefund = async () => {
+  try {
+    if (!window.ethereum) throw new Error("Metamask가 설치되어 있지 않습니다.");
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = getCrowdFundContract(signer);
+
+    const campaignId = 1;
+
+    const tx = await contract.refund(campaignId);
+    const receipt = await tx.wait();
+
+    if (receipt.status === 1) {
+      alert("환불이 완료되었습니다!");
+    } else {
+      throw new Error("트랜잭션 실패");
+    }
+  } catch (err: any) {
+    console.error(err);
+
+    const msg = err?.message?.toLowerCase();
+
+    if (msg?.includes("nothing to refund")) {
+      alert("환불 가능한 금액이 없습니다.");
+    } else if (msg?.includes("goal not reached")) {
+      alert("목표 금액을 달성한 프로젝트는 환불이 불가능합니다.");
+    } else if (msg?.includes("not ended")) {
+      alert("프로젝트 종료 후에만 환불이 가능합니다.");
+    } else {
+      alert("환불 실패: " + (err.message || "알 수 없는 오류"));
+    }
+  }
+};
 
   const project = {
     title: "무용영화 Entangled Body 얽힌몸",
@@ -225,7 +260,21 @@ export default function ProjectDetailPage() {
                   <Button onClick={handleFund} disabled={loading} className="w-full py-6 text-lg">
                     {loading ? "후원 중..." : "이 프로젝트 후원하기"}
                   </Button>
+
+                
+
                 </CardFooter>
+                <CardFooter>
+                {/* 환불 버튼 */}
+                <Button
+                  variant="outline"
+                  onClick={handleRefund}
+                  className="w-full py-6 text-lg border-primary text-primary"
+                >
+                  환불 받기
+                </Button>
+                </CardFooter>
+
               </Card>
             </div>
           </div>
