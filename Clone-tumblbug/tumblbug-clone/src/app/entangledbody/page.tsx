@@ -18,12 +18,14 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import InsufficientFundsPopup from "@/components/ui/InsufficientFundsPopup";
+import RefundSuccessPopup from "@/components/ui/RefundSuccessPopup";
 
 export default function ProjectDetailPage() {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [fundAmount, setFundAmount] = useState("0.01"); // 기본값 0.01 ETH
-
+  const [showRefundPopup, setShowRefundPopup] = useState(false);
+  
   const closePopup = () => setShowPopup(false);
 
   const handleFund = async () => {
@@ -77,7 +79,7 @@ export default function ProjectDetailPage() {
     const receipt = await tx.wait();
 
     if (receipt.status === 1) {
-      alert("환불이 완료되었습니다!");
+      setShowRefundPopup(true);
     } else {
       throw new Error("트랜잭션 실패");
     }
@@ -282,6 +284,7 @@ export default function ProjectDetailPage() {
       </main>
       <Footer />
       {showPopup && <InsufficientFundsPopup onClose={closePopup} />}
+      {showRefundPopup && <RefundSuccessPopup onClose={() => setShowRefundPopup(false)} />}
     </div>
   );
 }
