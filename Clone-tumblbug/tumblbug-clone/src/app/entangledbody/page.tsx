@@ -103,6 +103,29 @@ export default function ProjectDetailPage() {
   const [minting, setMinting] = useState(false);
 
   useEffect(() => {
+  async function check() {
+    if (!window.ethereum) return;
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    const contract = getCrowdFundContract(signer);
+
+    const network = await provider.getNetwork();
+    console.log("🌐 Connected to:", network.name, network.chainId);
+
+    try {
+      const pledged = await contract.pledgedOf(1, address);
+      console.log("🔍 pledgedOf 결과:", pledged.toString());
+    } catch (err: any) {
+      console.error("pledgedOf 호출 실패 ❌", err);
+    }
+  }
+
+  check();
+}, []);
+
+  useEffect(() => {
     async function checkEligibility() {
       if (!window.ethereum) return;
       const provider = new BrowserProvider(window.ethereum);
