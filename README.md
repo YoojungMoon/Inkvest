@@ -11,7 +11,7 @@ Inkvest는 블록체인 기반의 예술 창작 후원 플랫폼입니다.
 
 * 🎨 **캠페인 생성** (`createCampaign`)
 * 💸 **후원하기** (`contribute`)
-* 🔄 **환불불 받기** (`refund`)
+* 🔄 **환불 받기** (`refund`)
 * 🖼️ **NFT 민팅** (`mintArtworkNFT`)
 * 🏦 **창작자 출금** (`withdraw`)
 
