@@ -10,7 +10,13 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <span className="text-2xl font-bold text-[#1e1e1e]">tumblbug</span>
+        <Image
+          src="/Inkvest_logo.png"
+          alt="Inkvest Logo"
+          width={110}
+          height={20}
+          priority
+        />
         </Link>
 
         {/* Navigation for desktop */}
