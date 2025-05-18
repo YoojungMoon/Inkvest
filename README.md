@@ -9,9 +9,9 @@ Inkvest는 블록체인 기반의 예술 창작 후원 플랫폼입니다.
 
 ## ✨ 주요 기능
 
-* 🎨 **카페인 생성** (`createCampaign`)
+* 🎨 **캠페인 생성** (`createCampaign`)
 * 💸 **후원하기** (`contribute`)
-* 🔄 **환복 받기** (`refund`)
+* 🔄 **환불불 받기** (`refund`)
 * 🖼️ **NFT 민팅** (`mintArtworkNFT`)
 * 🏦 **창작자 출금** (`withdraw`)
 
@@ -41,6 +41,7 @@ npm install
 ```bash
 cd Inkvest/Inkvest_backend
 npx hardhat node
+npx hardhat run scripts/demo-flow.js --network localhost
 ```
 
 ### 3. 스마트 컨트랙트 배포
