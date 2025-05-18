@@ -25,9 +25,9 @@ const popularProjects = [
   },
   {
     id: 3,
-    title: "<토박이> 토마토 마가 보이는 길 !",
+    title: "The Harvest, Pontoise (La Récolte, Pontoise)",
     creator: "신혜정",
-    imageUrl: "https://ext.same-assets.com/2792592828/1291817823.jpeg",
+    imageUrl: "https://images.metmuseum.org/CRDImages/rl/original/DP-34499-001.jpg?_gl=1*1qq148x*_gcl_au*MjA1NjkzMzQxNy4xNzQzNjQ5ODMw*_ga*MTQwOTQ3ODI0NC4xNzQzNjQ5ODMw*_ga_Y0W8DGNBTB*czE3NDc1NjI3MjckbzMkZzEkdDE3NDc1NjI5NjAkajAkbDAkaDA.",
     fundingPercentage: 18875,
     fundingAmount: "566,273,000",
     daysLeft: 17,
@@ -35,9 +35,9 @@ const popularProjects = [
   },
   {
     id: 4,
-    title: "희망을 잇는 다리를 함께 건설합니다",
+    title: "Futakawa, from the series The Fifty-three Stations of the Tōkaidō Road",
     creator: "문유정",
-    imageUrl: "https://ext.same-assets.com/2792592828/421791190.png",
+    imageUrl: "https://images.metmuseum.org/CRDImages/as/original/DP122806.jpg?_gl=1*1a0s6b5*_gcl_au*MjA1NjkzMzQxNy4xNzQzNjQ5ODMw*_ga*MTQwOTQ3ODI0NC4xNzQzNjQ5ODMw*_ga_Y0W8DGNBTB*czE3NDc1NjI3MjckbzMkZzEkdDE3NDc1NjMxMjQkajAkbDAkaDA.",
     fundingPercentage: 2636,
     fundingAmount: "13,180,115",
     daysLeft: 6,

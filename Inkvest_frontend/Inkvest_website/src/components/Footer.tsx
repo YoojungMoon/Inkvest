@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Column 1: Information */}
           <div>
-            <h3 className="font-bold text-sm mb-4">텀블벅</h3>
+            <h3 className="font-bold text-sm mb-4">Inkvest</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/notices" className="text-xs text-gray-600 hover:text-primary">
@@ -29,12 +29,12 @@ const Footer = () => {
               </li>
               <li>
                 <Link href="/year2024" className="text-xs text-gray-600 hover:text-primary">
-                  2024 텀블벅 결산
+                  2025 Inkvest 결산
                 </Link>
               </li>
               <li>
                 <Link href="/sitemap" className="text-xs text-gray-600 hover:text-primary">
-                  텀블벅 컨설팅
+                  Inkvest 컨설팅
                 </Link>
               </li>
             </ul>
@@ -121,10 +121,10 @@ const Footer = () => {
 
         {/* Company Info */}
         <div className="mt-10 text-xs text-gray-500 space-y-1">
-          <p>회사명 (주) 백패커 | 대표 김연아 | 사업자등록번호 107-87-83297</p>
-          <p>통신판매업신고번호 2023-서울강남-2114 | 대표번호 02-6080-0760</p>
-          <p>이메일 support_tumblbug@backpac.kr</p>
-          <p>© 2025 Backpackr Inc.</p>
+          <p>숙명여자대학교교</p>
+          <p>서울특별시 용산구 청파로47길 100</p>
+          <p>이메일 inkvest@inkvest.co.kr</p>
+          <p>© 2025 inkvest Inc.</p>
         </div>
 
         {/* Social Links */}
@@ -155,15 +155,15 @@ const Footer = () => {
             <div className="w-16 h-16 bg-gray-300 rounded" />
           </Link>
           <p className="text-xs text-gray-500 flex-1">
-            [인증범위] 텀블벅 서비스 운영 (심사받지 않은 물리적 인프라 제외)<br />
-            [유효기간] 2024.11.06 ~ 2027.11.05
+            [인증범위] Inkvest 서비스 운영 (심사받지 않은 물리적 인프라 제외)<br />
+            [유효기간] 2025.03.06 ~ 2027.11.05
           </p>
         </div>
 
         <Separator className="my-6" />
 
         <p className="text-xs text-gray-500">
-          텀블벅은 플랫폼 제공자이며 직접적인 판매를 진행하지 않습니다. 프로젝트의 진행과 선물 전달의 책임은 해당 프로젝트의 창작자에게 있으며, 프로젝트와 선물 내용 및 진행에 관한 법적 책임은 창작자가 부담합니다.
+          Inkvest은 플랫폼 제공자이며 직접적인 판매를 진행하지 않습니다. 프로젝트의 진행과 선물 전달의 책임은 해당 프로젝트의 창작자에게 있으며, 프로젝트와 선물 내용 및 진행에 관한 법적 책임은 창작자가 부담합니다.
         </p>
       </div>
     </footer>
