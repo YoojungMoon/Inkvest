@@ -191,11 +191,12 @@ VITE_TIMELOCK_ADDRESS=${tlAddr}
 
   /*──────────────── 9. CrowdFund ABI 복사 ────────────*/
   const srcAbi = "./artifacts/contracts/CrowdFund.sol/CrowdFund.json";
-  const dstAbi = "../Clone-tumblbug/tumblbug-clone/src/lib/abi/CrowdFund.json";
+  const dstAbi = "../Inkvest_frontend/Inkvest_website/src/lib/abi/CrowdFund.json";
+  
   fs.mkdirSync(path.dirname(dstAbi), { recursive: true });
   fs.copyFileSync(srcAbi, dstAbi);
 
-  console.log("✔  env & ABI copied.");
+  console.log("✔ env & ABI copied.");
 }
 
 main().catch((e) => {
